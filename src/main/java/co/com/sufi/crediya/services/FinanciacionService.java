@@ -1,16 +1,47 @@
 package co.com.sufi.crediya.services;
 
+import co.com.sufi.crediya.entities.Financiacion;
 import co.com.sufi.crediya.exception.LogicaNegocioExcepcion;
+import co.com.sufi.crediya.repositories.ObjectRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Random;
 
 @Service
 public class FinanciacionService {
 
     private static final double IVA = 0.19;
+
+    private ObjectRepository<Financiacion> financiacionRepository = new ObjectRepository<Financiacion>("data/datos.data");
+
+
+    public void registrar(Financiacion financiacion){
+
+        try {
+
+            financiacionRepository.add(financiacion);
+
+        }catch (Exception e){
+
+        }
+
+    }
+
+    public List<Financiacion> listar(){
+
+        try {
+
+          return   financiacionRepository.getAll();
+
+        }catch (Exception e){
+
+        }
+        return null;
+    }
+
 
     public double calcularTasa(int numeroCuotas){
 

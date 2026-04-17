@@ -7,10 +7,7 @@ import co.com.sufi.crediya.entities.Financiacion;
 import co.com.sufi.crediya.services.FinanciacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -25,7 +22,10 @@ public class FinanciacionController {
     @Autowired
     private FinanciacionService financiacionService;
 
-    private List<Financiacion> creditosEnMemoria = new ArrayList<>();
+    @GetMapping
+    public ResponseEntity<List<Financiacion>> listar(){
+        return  ResponseEntity.ok(financiacionService.listar());
+    }
 
     @PostMapping
     public ResponseEntity<FinanciacionResponse> calcularFinanciacion(@RequestBody FinanciacionRequest request) {
@@ -41,7 +41,9 @@ public class FinanciacionController {
             int numeroCredito = financiacionService.generarNumeroCredito();
             LocalDate fechaPrimeraCuota = financiacionService.calcularFechaPrimeraCuota();
             Financiacion nuevaFinanciacion = new Financiacion(numeroCredito, valorFinanciar, numeroCuotas, tasaMensual, valorCuota, fechaPrimeraCuota);
-            creditosEnMemoria.add(nuevaFinanciacion);
+
+            financiacionService.registrar(nuevaFinanciacion);
+
 
             FinanciacionResponse respuesta = new FinanciacionResponse(
                     numeroCredito,

@@ -1,8 +1,9 @@
 package co.com.sufi.crediya.entities;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Financiacion {
+public class Financiacion implements Serializable {
 
     private int numeroCredito;
     private double valorFinanciar;
