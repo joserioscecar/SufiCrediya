@@ -1,4 +1,4 @@
-package co.com.sufi.Crediya;
+package co.com.sufi.crediya;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,8 +1,8 @@
-package co.com.sufi.Crediya.dtos;
+package co.com.sufi.crediya.dtos;
 
 import java.time.LocalDate;
 
-public record FinanciacionRequest(
+public record FinanciacionResponse(
 
         int numeroCredito,
         double valorFinanciar,
@@ -11,4 +11,5 @@ public record FinanciacionRequest(
         double valorCuota,
         LocalDate fechaPrimeraCuota
 
-) {}
+) {
+}

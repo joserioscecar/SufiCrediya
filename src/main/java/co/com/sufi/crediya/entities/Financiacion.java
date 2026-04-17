@@ -1,4 +1,4 @@
-package co.com.sufi.Crediya.entities;
+package co.com.sufi.crediya.entities;
 
 import java.time.LocalDate;
 
