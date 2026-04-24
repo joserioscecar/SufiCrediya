@@ -10,6 +10,5 @@ public record FinanciacionResponse(
         double tasaMensual,
         double valorCuota,
         LocalDate fechaPrimeraCuota
-
 ) {
 }
