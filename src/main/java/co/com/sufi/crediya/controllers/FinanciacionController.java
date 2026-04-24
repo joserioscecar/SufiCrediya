@@ -30,31 +30,13 @@ public class FinanciacionController {
     @PostMapping
     public ResponseEntity<FinanciacionResponse> calcularFinanciacion(@RequestBody FinanciacionRequest request) {
 
-        int numeroCuotas = request.numeroCuotas();
-        double valorFinanciar = request.valorFinanciar();
+
 
         try {
 
-            double tasaMensual = financiacionService.calcularTasa(request.numeroCuotas());
-            double valorCuota = financiacionService.calcularCuota(tasaMensual, numeroCuotas, valorFinanciar);
+            FinanciacionResponse respuesta = financiacionService.registrar(request);
 
-            int numeroCredito = financiacionService.generarNumeroCredito();
-            LocalDate fechaPrimeraCuota = financiacionService.calcularFechaPrimeraCuota();
-            Financiacion nuevaFinanciacion = new Financiacion(numeroCredito, valorFinanciar, numeroCuotas, tasaMensual, valorCuota, fechaPrimeraCuota);
-
-            financiacionService.registrar(nuevaFinanciacion);
-
-
-            FinanciacionResponse respuesta = new FinanciacionResponse(
-                    numeroCredito,
-                    valorFinanciar,
-                    numeroCuotas,
-                    tasaMensual,
-                    valorCuota,
-                    fechaPrimeraCuota
-            );
-
-            return ResponseEntity.created(URI.create("/api/financiaciones/"+numeroCredito)).body(respuesta);
+            return ResponseEntity.created(URI.create("/api/financiaciones/"+respuesta.numeroCredito())).body(respuesta);
 
         } catch (LogicaNegocioExcepcion e) {
             return ResponseEntity.badRequest().build();

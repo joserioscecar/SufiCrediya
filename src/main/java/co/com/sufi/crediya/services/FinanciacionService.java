@@ -1,5 +1,7 @@
 package co.com.sufi.crediya.services;
 
+import co.com.sufi.crediya.dtos.FinanciacionRequest;
+import co.com.sufi.crediya.dtos.FinanciacionResponse;
 import co.com.sufi.crediya.entities.Financiacion;
 import co.com.sufi.crediya.exception.LogicaNegocioExcepcion;
 import co.com.sufi.crediya.repositories.ObjectRepository;
@@ -17,14 +19,35 @@ public class FinanciacionService {
 
     private ObjectRepository<Financiacion> financiacionRepository = new ObjectRepository<Financiacion>("data/datos.data");
 
-
-    public void registrar(Financiacion financiacion){
+    public FinanciacionResponse registrar(FinanciacionRequest request){
 
         try {
 
-            financiacionRepository.add(financiacion);
+            int numeroCuotas = request.numeroCuotas();
+            double valorFinanciar = request.valorFinanciar();
+
+            double tasaMensual = calcularTasa(request.numeroCuotas());
+            double valorCuota = calcularCuota(tasaMensual, numeroCuotas, valorFinanciar);
+
+            int numeroCredito = generarNumeroCredito();
+            LocalDate fechaPrimeraCuota = calcularFechaPrimeraCuota();
+            Financiacion nuevaFinanciacion = new Financiacion(numeroCredito, valorFinanciar, numeroCuotas, tasaMensual, valorCuota, fechaPrimeraCuota);
+
+            financiacionRepository.add(nuevaFinanciacion);
+
+
+            return new FinanciacionResponse(
+                    numeroCredito,
+                    valorFinanciar,
+                    numeroCuotas,
+                    tasaMensual,
+                    valorCuota,
+                    fechaPrimeraCuota
+            );
 
         }catch (Exception e){
+
+            throw new RuntimeException("Ha ocuerido un error en el sistema");
 
         }
 
@@ -43,7 +66,7 @@ public class FinanciacionService {
     }
 
 
-    public double calcularTasa(int numeroCuotas){
+    private double calcularTasa(int numeroCuotas){
 
         double tasaBase = 0.0;
         if (numeroCuotas >= 2 && numeroCuotas <= 4) {
@@ -58,7 +81,7 @@ public class FinanciacionService {
         return tasaMensual;
     }
 
-    public double calcularCuota(double tasaMensual,int numeroCuotas, double valorFinanciar){
+    private double calcularCuota(double tasaMensual,int numeroCuotas, double valorFinanciar){
 
         if(valorFinanciar<=0){
 
@@ -72,7 +95,7 @@ public class FinanciacionService {
     }
 
 
-    public LocalDate calcularFechaPrimeraCuota(){
+    private LocalDate calcularFechaPrimeraCuota(){
 
         LocalDate fechaPrimeraCuota = LocalDate.now().plusMonths(1);
 
@@ -85,7 +108,7 @@ public class FinanciacionService {
         return fechaPrimeraCuota;
     }
 
-    public int generarNumeroCredito(){
+    private int generarNumeroCredito(){
 
        return  1000000 + new Random().nextInt(9000000);
     }
