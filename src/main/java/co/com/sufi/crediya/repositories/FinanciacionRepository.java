@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 
 @Repository
 public class FinanciacionRepository {
@@ -19,10 +16,13 @@ public class FinanciacionRepository {
     private DataSource dataSource;
     private String sql;
 
-    public FinanciacionRepository(DataSource dataSource){
+
+        public FinanciacionRepository(DataSource dataSource){
 
         this.dataSource = dataSource;
     }
+
+
 
 
     public void registrar(Financiacion financiacion) {
@@ -41,13 +41,13 @@ public class FinanciacionRepository {
             preparedStatement.setInt(4, financiacion.getNumeroCuotas());
             preparedStatement.setDouble(5,financiacion.getTasaMensual());
             preparedStatement.setDouble(6,financiacion.getValorCuota());
-            preparedStatement.setTimestamp(7, Timestamp.valueOf("2026-04-24"));
+            preparedStatement.setDate(7, Date.valueOf(financiacion.getFechaPrimeraCuota()));
 
             preparedStatement.execute();
 
         } catch (SQLException sqle) {
 
-            throw new RuntimeException("");
+            sqle.printStackTrace();
         }
 
 

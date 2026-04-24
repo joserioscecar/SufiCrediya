@@ -2,6 +2,7 @@ package co.com.sufi.crediya.entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Financiacion implements Serializable {
 
@@ -11,6 +12,7 @@ public class Financiacion implements Serializable {
     private double tasaMensual;
     private double valorCuota;
     private LocalDate fechaPrimeraCuota;
+    private LocalDateTime fechaRegistro;
 
     public Financiacion(int numeroCredito, double valorFinanciar, int numeroCuotas, double tasaMensual, double valorCuota, LocalDate fechaPrimeraCuota) {
         this.numeroCredito = numeroCredito;
@@ -19,6 +21,7 @@ public class Financiacion implements Serializable {
         this.tasaMensual = tasaMensual;
         this.valorCuota = valorCuota;
         this.fechaPrimeraCuota = fechaPrimeraCuota;
+        this.fechaRegistro = LocalDateTime.now();
     }
 
     public int getNumeroCredito() { return numeroCredito; }
