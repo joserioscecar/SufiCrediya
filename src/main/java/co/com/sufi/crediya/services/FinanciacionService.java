@@ -17,7 +17,7 @@ public class FinanciacionService {
 
     private static final double IVA = 0.19;
 
-    private ObjectRepository<Financiacion> financiacionRepository = new ObjectRepository<Financiacion>("data/datos.data");
+    private ObjectRepository<Financiacion> financiacionObjectRepository = new ObjectRepository<Financiacion>("data/datos.data");
 
     public FinanciacionResponse registrar(FinanciacionRequest request){
 
@@ -33,7 +33,7 @@ public class FinanciacionService {
             LocalDate fechaPrimeraCuota = calcularFechaPrimeraCuota();
             Financiacion nuevaFinanciacion = new Financiacion(numeroCredito,request.titular(), valorFinanciar, numeroCuotas, tasaMensual, valorCuota, fechaPrimeraCuota);
 
-            financiacionRepository.add(nuevaFinanciacion);
+            financiacionObjectRepository.add(nuevaFinanciacion);
 
             return new FinanciacionResponse(
                     numeroCredito,
@@ -56,7 +56,7 @@ public class FinanciacionService {
 
         try {
 
-          return financiacionRepository.getAll();
+          return financiacionObjectRepository.getAll();
 
         }catch (Exception e){
 
