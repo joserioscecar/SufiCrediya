@@ -5,6 +5,8 @@ import co.com.sufi.crediya.dtos.FinanciacionResponse;
 import co.com.sufi.crediya.entities.Financiacion;
 import co.com.sufi.crediya.exception.LogicaNegocioExcepcion;
 import co.com.sufi.crediya.repositories.ObjectRepository;
+import co.com.sufi.crediya.repositories.FinanciacionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -18,6 +20,10 @@ public class FinanciacionService {
     private static final double IVA = 0.19;
 
     private ObjectRepository<Financiacion> financiacionObjectRepository = new ObjectRepository<Financiacion>("data/datos.data");
+
+
+    @Autowired
+    private FinanciacionRepository financiacionRepository;
 
     public FinanciacionResponse registrar(FinanciacionRequest request){
 
@@ -33,7 +39,11 @@ public class FinanciacionService {
             LocalDate fechaPrimeraCuota = calcularFechaPrimeraCuota();
             Financiacion nuevaFinanciacion = new Financiacion(numeroCredito,request.titular(), valorFinanciar, numeroCuotas, tasaMensual, valorCuota, fechaPrimeraCuota);
 
+            /*
             financiacionObjectRepository.add(nuevaFinanciacion);
+             */
+
+            financiacionRepository.registrar(nuevaFinanciacion);
 
             return new FinanciacionResponse(
                     numeroCredito,
@@ -56,7 +66,7 @@ public class FinanciacionService {
 
         try {
 
-          return financiacionObjectRepository.getAll();
+          return financiacionRepository.listar();
 
         }catch (Exception e){
 

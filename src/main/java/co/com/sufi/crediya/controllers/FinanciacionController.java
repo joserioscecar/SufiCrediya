@@ -4,6 +4,7 @@ import co.com.sufi.crediya.exception.LogicaNegocioExcepcion;
 import co.com.sufi.crediya.dtos.FinanciacionRequest;
 import co.com.sufi.crediya.dtos.FinanciacionResponse;
 import co.com.sufi.crediya.entities.Financiacion;
+import co.com.sufi.crediya.repositories.FinanciacionRepository;
 import co.com.sufi.crediya.services.FinanciacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +23,28 @@ public class FinanciacionController {
     @Autowired
     private FinanciacionService financiacionService;
 
+    @Autowired
+    private FinanciacionRepository financiacionRepository;
+
     @GetMapping
     public ResponseEntity<List<Financiacion>> listar(){
         return  ResponseEntity.ok(financiacionService.listar());
     }
+
+    @DeleteMapping("{numeroCredito}")
+    public ResponseEntity borrar(@PathVariable int numeroCredito){
+
+        boolean borrado = financiacionRepository.eliminar(numeroCredito);
+
+        if (borrado){
+
+            return  ResponseEntity.noContent().build();
+
+        }
+
+        return  ResponseEntity.notFound().build();
+    }
+
 
     @PostMapping
     public ResponseEntity<FinanciacionResponse> calcularFinanciacion(@RequestBody FinanciacionRequest request) {
