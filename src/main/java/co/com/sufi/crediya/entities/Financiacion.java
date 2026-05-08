@@ -1,5 +1,7 @@
 package co.com.sufi.crediya.entities;
 
+import co.com.sufi.crediya.enums.EstadoFinanciacion;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,6 +16,7 @@ public class Financiacion implements Serializable {
     private double valorCuota;
     private LocalDate fechaPrimeraCuota;
     private LocalDateTime fechaRegistro;
+    private EstadoFinanciacion estado;
 
     public Financiacion(int numeroCredito,String titular, double valorFinanciar, int numeroCuotas, double tasaMensual, double valorCuota, LocalDate fechaPrimeraCuota) {
         this.numeroCredito = numeroCredito;
@@ -24,6 +27,8 @@ public class Financiacion implements Serializable {
         this.valorCuota = valorCuota;
         this.fechaPrimeraCuota = fechaPrimeraCuota;
         this.fechaRegistro = LocalDateTime.now();
+        this.estado = EstadoFinanciacion.PENDIENTE;
+
     }
 
     public int getNumeroCredito() {
@@ -46,6 +51,14 @@ public class Financiacion implements Serializable {
     }
     public String getTitular() {
         return titular;
+    }
+
+    public EstadoFinanciacion getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoFinanciacion estado) {
+        this.estado = estado;
     }
 }
 

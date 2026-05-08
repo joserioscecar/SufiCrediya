@@ -1,6 +1,7 @@
 package co.com.sufi.crediya.repositories;
 
 import co.com.sufi.crediya.entities.Financiacion;
+import co.com.sufi.crediya.enums.EstadoFinanciacion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -57,6 +58,31 @@ public class FinanciacionRepository {
 
     }
 
+    public  boolean actualizar(int numeroCredito, EstadoFinanciacion estado){
+
+        sql ="UPDATE  financiaciones  SET estado = ? WHERE numero_credito = ?";
+
+        try(
+                Connection connection = dataSource.getConnection();
+                PreparedStatement sentencia = connection.prepareStatement(sql);
+        ) {
+
+
+            sentencia.setString(1,estado.toString());
+            sentencia.setInt(2,numeroCredito);
+
+            return sentencia.executeUpdate()>0;
+
+        }catch (SQLException sqle){
+
+            sqle.printStackTrace();
+
+            throw  new RuntimeException("");
+        }
+
+
+    }
+
     public  boolean eliminar(int numeroCredito){
 
         sql ="DELETE FROM financiaciones WHERE numero_credito = ?";
@@ -83,50 +109,15 @@ public class FinanciacionRepository {
     }
 
 
-    public  void registrar(Financiacion financiacion, String estado){
-
-        sql ="insert into  financiaciones(numero_credito,titular,valor_financiar,numero_cuotas,tasa_mensual,valor_cuota,fecha_primera_cuota,fecha_registro) values (?,?,?,?,?,?,?,?)";
-
-        try(
-                Connection connection = dataSource.getConnection();
-                PreparedStatement sentencia = connection.prepareStatement(sql);
-        ) {
-
-
-
-            sentencia.setInt(1,financiacion.getNumeroCredito());
-            sentencia.setString(2,financiacion.getTitular());
-            sentencia.setDouble(3,financiacion.getValorFinanciar());
-            sentencia.setInt(4,financiacion.getNumeroCuotas());
-            sentencia.setDouble(5,financiacion.getTasaMensual());
-            sentencia.setDouble(6,financiacion.getValorCuota());
-            sentencia.setDate(7, Date.valueOf(financiacion.getFechaPrimeraCuota()));
-            sentencia.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
-
-
-            sentencia.executeUpdate();
-
-        }catch (SQLException sqle){
-
-            sqle.printStackTrace();
-
-            throw  new RuntimeException("");
-        }
-
-
-    }
-
     public  void registrar(Financiacion financiacion){
 
-        sql ="insert into  financiaciones(numero_credito,titular,valor_financiar,numero_cuotas,tasa_mensual,valor_cuota,fecha_primera_cuota,fecha_registro) values (?,?,?,?,?,?,?,?)";
+        sql ="insert into  financiaciones(numero_credito,titular,valor_financiar,numero_cuotas,tasa_mensual,valor_cuota,fecha_primera_cuota,fecha_registro,estado) values (?,?,?,?,?,?,?,?,?)";
 
         try(
                 Connection connection = dataSource.getConnection();
                 PreparedStatement sentencia = connection.prepareStatement(sql);
      ) {
 
-
-
             sentencia.setInt(1,financiacion.getNumeroCredito());
             sentencia.setString(2,financiacion.getTitular());
             sentencia.setDouble(3,financiacion.getValorFinanciar());
@@ -135,7 +126,7 @@ public class FinanciacionRepository {
             sentencia.setDouble(6,financiacion.getValorCuota());
             sentencia.setDate(7, Date.valueOf(financiacion.getFechaPrimeraCuota()));
             sentencia.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
-
+            sentencia.setString(9, financiacion.getEstado().toString());
 
             sentencia.executeUpdate();
 

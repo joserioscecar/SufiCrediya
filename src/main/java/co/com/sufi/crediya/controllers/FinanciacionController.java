@@ -1,5 +1,6 @@
 package co.com.sufi.crediya.controllers;
 
+import co.com.sufi.crediya.dtos.ActualizarFInanciacionRequest;
 import co.com.sufi.crediya.exception.LogicaNegocioExcepcion;
 import co.com.sufi.crediya.dtos.FinanciacionRequest;
 import co.com.sufi.crediya.dtos.FinanciacionResponse;
@@ -34,6 +35,11 @@ public class FinanciacionController {
     @DeleteMapping("{numeroCredito}")
     public ResponseEntity borrar(@PathVariable int numeroCredito){
 
+
+        /*
+         * Nota: Utilizo el repositorio directamente porque no tengo lógica de negocio
+         * */
+
         boolean borrado = financiacionRepository.eliminar(numeroCredito);
 
         if (borrado){
@@ -43,6 +49,26 @@ public class FinanciacionController {
         }
 
         return  ResponseEntity.notFound().build();
+    }
+
+
+    @PutMapping("{numeroCredito}")
+    public  ResponseEntity actualizar(@PathVariable int numeroCredito, @RequestBody ActualizarFInanciacionRequest request){
+
+        /*
+        * Nota: Utilizo el repositorio directamente porque no tengo lógica de negocio
+        * */
+
+        boolean actualizado = financiacionRepository.actualizar(numeroCredito,request.estado());
+
+        if (actualizado){
+
+            return  ResponseEntity.noContent().build();
+
+        }
+
+        return  ResponseEntity.notFound().build();
+
     }
 
 
