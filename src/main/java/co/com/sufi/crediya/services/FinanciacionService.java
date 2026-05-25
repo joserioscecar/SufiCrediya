@@ -4,8 +4,9 @@ import co.com.sufi.crediya.dtos.FinanciacionRequest;
 import co.com.sufi.crediya.dtos.FinanciacionResponse;
 import co.com.sufi.crediya.entities.Financiacion;
 import co.com.sufi.crediya.exception.LogicaNegocioExcepcion;
-import co.com.sufi.crediya.repositories.ObjectRepository;
 import co.com.sufi.crediya.repositories.FinanciacionRepository;
+import co.com.sufi.crediya.repositories.ObjectRepository;
+import co.com.sufi.crediya.repositories.FinanciacionRepositoryJdbc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +22,12 @@ public class FinanciacionService {
 
     private ObjectRepository<Financiacion> financiacionObjectRepository = new ObjectRepository<Financiacion>("data/datos.data");
 
-
-    @Autowired
     private FinanciacionRepository financiacionRepository;
+
+
+    public FinanciacionService(FinanciacionRepository financiacionRepository) {
+        this.financiacionRepository = financiacionRepository;
+    }
 
     public FinanciacionResponse registrar(FinanciacionRequest request){
 

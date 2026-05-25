@@ -6,15 +6,15 @@ import co.com.sufi.crediya.dtos.FinanciacionRequest;
 import co.com.sufi.crediya.dtos.FinanciacionResponse;
 import co.com.sufi.crediya.entities.Financiacion;
 import co.com.sufi.crediya.repositories.FinanciacionRepository;
+import co.com.sufi.crediya.repositories.FinanciacionRepositoryJdbc;
 import co.com.sufi.crediya.services.FinanciacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -51,6 +51,25 @@ public class FinanciacionController {
         return  ResponseEntity.notFound().build();
     }
 
+
+    @GetMapping("{numeroCredito}")
+    public  ResponseEntity consultar(@PathVariable int numeroCredito){
+
+        /*
+         * Nota: Utilizo el repositorio directamente porque no tengo lógica de negocio
+         * */
+
+        Optional<Financiacion> encontrado = financiacionRepository.consultar(numeroCredito);
+
+        if (encontrado.isPresent()){
+
+            return  ResponseEntity.ok(encontrado.get());
+
+        }
+
+        return  ResponseEntity.notFound().build();
+
+    }
 
     @PutMapping("{numeroCredito}")
     public  ResponseEntity actualizar(@PathVariable int numeroCredito, @RequestBody ActualizarFInanciacionRequest request){
